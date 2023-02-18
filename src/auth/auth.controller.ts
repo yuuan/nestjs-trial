@@ -15,4 +15,10 @@ export class AuthController {
   async login(@Request() request: any) {
     return request.user;
   }
+
+  @Post('auth/logout')
+  @HttpCode(204)
+  async logout(@Request() request: any): Promise<void> {
+    request.session.destroy();
+  }
 }

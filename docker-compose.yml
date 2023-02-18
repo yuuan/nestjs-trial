@@ -1,6 +1,6 @@
 version: '3'
 services:
-  nestjs-trial:
+  app:
     container_name: nestjs-trial
     image: node:18
     restart: always
@@ -13,3 +13,15 @@ services:
       - yarn
       - run
       - start:dev
+  db:
+    container_name: nestjs-trial-db
+    image: mysql:8
+    restart: always
+    volumes:
+      - ./docker/mysql/data:/var/lib/mysql:delegated
+      - ./docker/mysql/history:/root/.config/mysql
+    environment:
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_HISTFILE: /root/.config/mysql/.mysql_hisotry
+      TZ: Asia/Tokyo

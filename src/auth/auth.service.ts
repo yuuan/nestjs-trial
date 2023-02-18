@@ -15,4 +15,8 @@ export class AuthService {
 
     return null;
   }
+
+  async getAuthenticatedUser(id: number): Promise<User | null> {
+    return await this.usersService.findById(id);
+  }
 }

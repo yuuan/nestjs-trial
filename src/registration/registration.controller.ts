@@ -1,8 +1,19 @@
-import { BadRequestException, Body, Controller, HttpStatus, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+  Controller,
+  UseInterceptors,
+  UsePipes,
+  Body,
+  ClassSerializerInterceptor,
+  ValidationPipe,
+  Post,
+  HttpStatus,
+  BadRequestException,
+} from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { UserRegisteredMail } from '../mail/user-registered.mail';
 import { RegisterUserDto } from './register-user.dto';
 import { EmailMustBeUniqueError } from 'src/users/email-must-be-unique.error';
+import { UserResponse } from '../responses/user.response';
 
 @Controller('registration')
 export class RegistrationController {
@@ -11,6 +22,7 @@ export class RegistrationController {
     private userRegisteredMail: UserRegisteredMail,
   ) {}
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post()
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   async store(@Body() registerUserDto: RegisterUserDto) {
@@ -19,7 +31,7 @@ export class RegistrationController {
 
       this.userRegisteredMail.send(user);
 
-      return user;
+      return new UserResponse(user);
     }
     catch (e) {
       if (e instanceof EmailMustBeUniqueError) {

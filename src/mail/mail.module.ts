@@ -1,30 +1,35 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { UserRegisteredMail } from './user-registered.mail';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { join } from 'path';
+import { UserRegisteredMail } from './user-registered.mail';
 
 @Module({
   imports: [
-    MailerModule.forRoot({
-      transport: {
-        host: process.env.MAIL_HOST,
-        port: parseInt(process.env.MAIL_PORT, 10),
-        auth: {
-          user: process.env.MAIL_USERNAME,
-          pass: process.env.MAIL_PASSWORD,
+    MailerModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        transport: {
+          host: configService.get<string>('mail.host'),
+          port: configService.get<number>('mail.port'),
+          auth: {
+            user: configService.get<string>('mail.username'),
+            pass: configService.get<string>('mail.password'),
+          },
         },
-      },
-      defaults: {
-        from: process.env.MAIL_FROM,
-      },
-      template: {
-        dir: join(__dirname, '/templates'),
-        adapter: new HandlebarsAdapter(),
-        options: {
-          strict: true,
+        defaults: {
+          from: configService.get<string>('mail.from'),
         },
-      },
+        template: {
+          dir: join(__dirname, '/templates'),
+          adapter: new HandlebarsAdapter(),
+          options: {
+            strict: true,
+          },
+        },
+      }),
+      inject: [ConfigService],
     }),
   ],
   providers: [UserRegisteredMail],

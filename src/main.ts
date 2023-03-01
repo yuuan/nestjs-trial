@@ -1,14 +1,16 @@
 import { NestFactory } from '@nestjs/core';
+import { ConfigService } from '@nestjs/config';
 import * as session from 'express-session';
 import * as passport from 'passport';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService);
 
   app.use(
     session({
-      secret: process.env.APP_SECRET,
+      secret: configService.get<string>('app.secret'),
       resave: false,
       saveUninitialized: false,
       cookie: {

@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { RegistrationModule } from './registration/registration.module';
 import { BooksModule } from './books/books.module';
 import { MailModule } from './mail/mail.module';
+import { ResponsesModule } from './responses/responses.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { MailModule } from './mail/mail.module';
     RegistrationModule,
     BooksModule,
     MailModule,
+    ResponsesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

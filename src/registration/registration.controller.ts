@@ -12,7 +12,7 @@ import {
 import { UsersService } from '../users/users.service';
 import { UserRegisteredMail } from '../mail/user-registered.mail';
 import { RegisterUserDto } from './register-user.dto';
-import { EmailMustBeUniqueError } from 'src/users/email-must-be-unique.error';
+import { EmailMustBeUniqueError } from '../users/email-must-be-unique.error';
 import { UserResponse } from '../responses/user.response';
 
 @Controller('registration')

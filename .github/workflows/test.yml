@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - .gitignore
+      - .env.example
+      - docker-compose.yml
+      - README.md
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  tsc:
+    name: TSC
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: yarn
+      - name: Install packages
+        run: yarn install --frozen-lockfile
+      - name: Generate prisma
+        run: yarn run prisma generate
+      - name: Run tsc
+        run: 'yarn run compile'
+
+  eslint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: yarn
+      - name: Install packages
+        run: yarn install --frozen-lockfile
+      - name: Generate prisma
+        run: yarn run prisma generate
+      - name: Run ESLint
+        run: 'yarn run lint'
+
+  jest:
+    name: Jest
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          TZ: Asia/Tokyo
+          MYSQL_ALLOW_EMPTY_PASSWORD: 1
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd "mysqladmin ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up .env
+        run: echo 'DATABASE_URL="mysql://root@localhost:3306/testing"' > .env
+      - name: Set up node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'yarn'
+      - name: Install packages
+        run: yarn install --frozen-lockfile
+      - name: Generate prisma
+        run: yarn run prisma generate
+      - name: Setup database
+        run: yarn run prisma db push --force-reset
+      - name: Run jest
+        run: yarn run test

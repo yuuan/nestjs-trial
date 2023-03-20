@@ -1,18 +1,29 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { HttpService } from '@nestjs/axios';
+import { AxiosResponse } from 'axios';
+import { of } from 'rxjs';
 import { BooksService } from './books.service';
 
 describe('BooksService', () => {
-  let service: BooksService;
+  let booksService: BooksService;
+  let httpService: HttpService = new HttpService();
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [BooksService],
-    }).compile();
+  const isbn = '9784774196053';
 
-    service = module.get<BooksService>(BooksService);
-  });
+  describe('find', () => {
+    const responseBody = ['success'];
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+    beforeEach(async () => {
+      jest
+        .spyOn(httpService, 'get')
+        .mockImplementationOnce(() => of({ data: responseBody } as AxiosResponse));
+
+      booksService = new BooksService(httpService);
+    });
+
+    it('should return the bibliographic infomation for the specified book', async () => {
+      const book = await booksService.find(isbn);
+
+      expect(book).toEqual(responseBody);
+    });
   });
 });

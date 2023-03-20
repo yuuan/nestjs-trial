@@ -1,5 +1,7 @@
 # secrets
 .env
+.env.development
+.env.test
 
 # compiled output
 /dist

@@ -15,7 +15,9 @@ describe('BooksService', () => {
     beforeEach(async () => {
       jest
         .spyOn(httpService, 'get')
-        .mockImplementationOnce(() => of({ data: responseBody } as AxiosResponse));
+        .mockImplementationOnce(() =>
+          of({ data: responseBody } as AxiosResponse),
+        );
 
       booksService = new BooksService(httpService);
     });

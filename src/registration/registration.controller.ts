@@ -32,12 +32,11 @@ export class RegistrationController {
       this.userRegisteredMail.send(user);
 
       return new UserResponse(user);
-    }
-    catch (e) {
+    } catch (e) {
       if (e instanceof EmailMustBeUniqueError) {
         throw new BadRequestException({
           statusCode: HttpStatus.BAD_REQUEST,
-          message: [ e.message ],
+          message: [e.message],
           error: 'Bad Request',
         });
       }

@@ -1,4 +1,4 @@
-import { registerAs } from "@nestjs/config";
+import { registerAs } from '@nestjs/config';
 
 export default registerAs('mail', () => ({
   host: process.env.MAIL_HOST || 'sandbox.smtp.mailtrap.io',

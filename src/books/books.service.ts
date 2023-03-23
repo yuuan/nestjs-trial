@@ -10,10 +10,10 @@ export class BooksService {
     const observable = this.httpService.get('https://api.openbd.jp/v1/get', {
       params: {
         isbn: isbn,
-      }
+      },
     });
     const response = await lastValueFrom(observable);
 
-    return (response).data;
+    return response.data;
   }
 }

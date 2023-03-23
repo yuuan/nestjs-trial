@@ -12,7 +12,7 @@ export class UserRegisteredMail {
       subject: 'Your user is registrated.',
       template: './user-registered',
       context: {
-        user: user
+        user: user,
       },
     });
   }

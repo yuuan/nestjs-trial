@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaService } from '../prisma/prisma.service';
-import { PrismaModule } from '../prisma/prisma.module';
+import { PrismaService } from '@/prisma/prisma.service';
+import { PrismaModule } from '@/prisma/prisma.module';
 import { UsersService } from './users.service';
-import { initialize, UserFactory } from '../prisma/factories';
+import { initialize, UserFactory } from '@/prisma/factories';
 import { EmailMustBeUniqueError } from './email-must-be-unique.error';
 
 describe('UsersService', () => {
@@ -38,8 +38,8 @@ describe('UsersService', () => {
       let id: number;
 
       beforeAll(async () => {
-         const user = await UserFactory.create();
-         id = user.id;
+        const user = await UserFactory.create();
+        id = user.id;
       });
 
       afterAll(() => {
@@ -65,7 +65,7 @@ describe('UsersService', () => {
       const email = 'existent@example.com';
 
       beforeAll(async () => {
-         await UserFactory.create({ email });
+        await UserFactory.create({ email });
       });
 
       afterAll(async () => {
@@ -113,8 +113,9 @@ describe('UsersService', () => {
       });
 
       it('should throw an exception', async () => {
-        await expect(usersService.create(createUserDto))
-          .rejects.toThrow(EmailMustBeUniqueError);
+        await expect(usersService.create(createUserDto)).rejects.toThrow(
+          EmailMustBeUniqueError,
+        );
       });
     });
   });

@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaService } from '../prisma/prisma.service';
-import { PrismaModule } from '../prisma/prisma.module';
+import { PrismaService } from '@/prisma/prisma.service';
+import { PrismaModule } from '@/prisma/prisma.module';
 import { UsersService } from './users.service';
-import { initialize, UserFactory } from '../prisma/factories';
+import { initialize, UserFactory } from '@/prisma/factories';
 import { EmailMustBeUniqueError } from './email-must-be-unique.error';
 
 describe('UsersService', () => {

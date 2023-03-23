@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { UsersModule } from '../users/users.module';
-import { ResponsesModule } from '../responses/responses.module';
+import { UsersModule } from '@/users/users.module';
+import { ResponsesModule } from '@/responses/responses.module';
 import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { SessionSerializer } from './session.serializer';

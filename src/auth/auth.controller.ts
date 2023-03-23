@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { LocalAuthGuard } from './local-auth.guard';
 import { AuthenticatedGuard } from './authenticated.guard';
-import { UserResponse } from '../responses/user.response';
+import { UserResponse } from '@/responses/user.response';
 
 @Controller()
 export class AuthController {

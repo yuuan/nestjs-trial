@@ -9,6 +9,7 @@ import { RegistrationModule } from './registration/registration.module';
 import { BooksModule } from './books/books.module';
 import { MailModule } from './mail/mail.module';
 import { ResponsesModule } from './responses/responses.module';
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ResponsesModule } from './responses/responses.module';
     }),
     AuthModule,
     RegistrationModule,
+    FilesModule,
     BooksModule,
     MailModule,
     ResponsesModule,

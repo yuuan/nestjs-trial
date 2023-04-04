@@ -1,9 +1,12 @@
 import {
   ClassSerializerInterceptor,
   Controller,
+  FileTypeValidator,
   ForbiddenException,
   Get,
+  MaxFileSizeValidator,
   Param,
+  ParseFilePipe,
   Post,
   Req,
   Res,
@@ -47,7 +50,15 @@ export class FilesController {
   @UseInterceptors(ClassSerializerInterceptor)
   async create(
     @Req() request,
-    @UploadedFile() uploadedFile: Express.Multer.File,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 20 * 1024 * 1024 }),
+          new FileTypeValidator({ fileType: 'image/jpeg' }),
+        ],
+      }),
+    )
+    uploadedFile: Express.Multer.File,
   ) {
     const file = await this.filesService.create(uploadedFile, request.user);
 

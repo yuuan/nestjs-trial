@@ -70,6 +70,7 @@ describe('FilesController', () => {
       const user = await UserFactory.create();
       mockedRequest = { user } as unknown as Request;
 
+      // Controller のテストではバリデーションは行われない
       uploadedFile = {
         originalname: 'NAME',
         mimetype: 'text/plain',

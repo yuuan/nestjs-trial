@@ -5,7 +5,7 @@ import { BooksService } from './books.service';
 
 describe('BooksService', () => {
   let booksService: BooksService;
-  let httpService: HttpService = new HttpService();
+  const httpService: HttpService = new HttpService();
 
   const isbn = '9784774196053';
 

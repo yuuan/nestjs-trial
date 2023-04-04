@@ -1,17 +1,23 @@
 import {
+  ClassSerializerInterceptor,
   Controller,
   ForbiddenException,
   Get,
   Param,
+  Post,
   Req,
   Res,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { AuthenticatedGuard } from '@/auth/authenticated.guard';
 import { FilesService } from './files.service';
+import { FileResponse } from '@/responses/file.response';
 
 @Controller('files')
 export class FilesController {
@@ -33,5 +39,18 @@ export class FilesController {
 
     response.setHeader('Content-Type', file.mime);
     response.send(file.content);
+  }
+
+  @Post()
+  @UseGuards(AuthenticatedGuard)
+  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(ClassSerializerInterceptor)
+  async create(
+    @Req() request,
+    @UploadedFile() uploadedFile: Express.Multer.File,
+  ) {
+    const file = await this.filesService.create(uploadedFile, request.user);
+
+    return new FileResponse(file);
   }
 }

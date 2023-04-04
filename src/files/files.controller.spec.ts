@@ -1,4 +1,4 @@
-import { initialize, FileFactory } from '@/prisma/factories';
+import { initialize, FileFactory, UserFactory } from '@/prisma/factories';
 import { PrismaModule } from '@/prisma/prisma.module';
 import { PrismaService } from '@/prisma/prisma.service';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -59,6 +59,31 @@ describe('FilesController', () => {
       expect(spy).toHaveBeenCalled();
 
       spy.mockRestore();
+    });
+  });
+
+  describe('create', () => {
+    let uploadedFile: Express.Multer.File;
+    let mockedRequest: Request;
+
+    beforeAll(async () => {
+      const user = await UserFactory.create();
+      mockedRequest = { user } as unknown as Request;
+
+      uploadedFile = {
+        originalname: 'NAME',
+        mimetype: 'text/plain',
+        buffer: Buffer.from('ABC'),
+      } as Express.Multer.File;
+    });
+
+    it('should register the specified file', async () => {
+      const response = await filesController.create(
+        mockedRequest,
+        uploadedFile,
+      );
+
+      expect(response).toBeTruthy();
     });
   });
 });

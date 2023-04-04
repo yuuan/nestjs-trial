@@ -8,6 +8,9 @@ export class FilesService {
 
   async findById(id: number): Promise<File | null> {
     return this.prisma.file.findUnique({
+      include: {
+        author: true,
+      },
       where: { id },
     });
   }

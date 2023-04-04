@@ -48,7 +48,12 @@ describe('FilesService', () => {
       });
 
       it('should be found by the given id', async () => {
-        expect(await filesService.findById(id)).toBeTruthy();
+        const file = await filesService.findById(id);
+
+        expect(file).toBeTruthy();
+
+        // File の定義に author が含まれないため any で回避
+        expect((file as any).author.id).toEqual(file.author_id);
       });
     });
   });
